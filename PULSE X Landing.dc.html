@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0b0b12; font-family:'Manrope',system-ui,sans-serif; }
+  @keyframes floatBlob { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,26px) scale(1.08); } }
+  @keyframes floatBlob2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(34px,-24px) scale(0.94); } }
+  @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  @keyframes bounceCue { 0%,100% { transform: translateY(0); opacity:0.6; } 50% { transform: translateY(10px); opacity:1; } }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes pulseGlow { 0%,100% { opacity:0.5; } 50% { opacity:1; } }
+</style>
+</helmet>
+
+<div data-screen-label="PULSE X Landing" style="background:#0b0b12; overflow-x:hidden;">
+
+  <!-- ============ NAV ============ -->
+  <nav style="{{ navStyle }}">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:20px; height:20px; border-radius:6px; background:linear-gradient(135deg,#3d5cff,#8a3dff,#ff3dc0);"></div>
+      <span style="font:700 18px 'Space Grotesk',sans-serif; color:#f4f3f7; letter-spacing:0.02em;">PULSE</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:36px;">
+      <span style="font:500 14px 'Manrope',sans-serif; color:rgba(255,255,255,.65);">產品</span>
+      <span style="font:500 14px 'Manrope',sans-serif; color:rgba(255,255,255,.65);">規格</span>
+      <span style="font:500 14px 'Manrope',sans-serif; color:rgba(255,255,255,.65);">配色</span>
+      <div style="font:700 13px 'Manrope',sans-serif; color:#0b0b12; background:linear-gradient(135deg,#8a3dff,#ff3dc0); padding:10px 20px; border-radius:999px;">立即預購</div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section style="position:relative; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; overflow:hidden; background:linear-gradient(120deg,#3d5cff,#8a3dff,#ff3dc0); background-size:220% 220%; animation:gradientShift 12s ease-in-out infinite; padding:0 24px;">
+    <div style="position:absolute; top:-10%; left:-8%; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.35), transparent 70%); filter:blur(20px); animation:floatBlob 9s ease-in-out infinite;"></div>
+    <div style="position:absolute; bottom:-14%; right:-8%; width:460px; height:460px; border-radius:50%; background:radial-gradient(circle, rgba(11,11,18,.4), transparent 70%); filter:blur(20px); animation:floatBlob2 10s ease-in-out infinite;"></div>
+
+    <div style="{{ heroTextStyle }}">
+      <div style="display:inline-block; font:700 12px 'JetBrains Mono',monospace; letter-spacing:0.1em; color:#fff; background:#0b0b12; padding:6px 14px; border-radius:999px; margin-bottom:28px;">NEW · 2026</div>
+      <h1 style="margin:0 0 22px; font:700 88px/1.05 'Space Grotesk',sans-serif; color:#0b0b12; letter-spacing:-0.02em;">色彩,<br>就是態度。</h1>
+      <p style="margin:0 auto 36px; font:500 20px/1.6 'Manrope',sans-serif; color:rgba(11,11,18,.78); max-width:560px;">PULSE X 亮彩系列,鮮豔不設限,為潮流玩家而生。</p>
+      <div style="display:flex; gap:16px; align-items:center; justify-content:center;">
+        <div style="font:700 16px 'Manrope',sans-serif; color:#fff; background:#0b0b12; padding:17px 34px; border-radius:999px; cursor:pointer;">立即預購</div>
+        <div style="font:700 16px 'Manrope',sans-serif; color:#0b0b12; cursor:pointer;">了解更多 →</div>
+      </div>
+    </div>
+
+    <div style="{{ heroVisualStyle }}">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hero-render" style="{{ heroBlobParallax }}" shape="rounded" radius="24" placeholder="拖曳手機正面渲染圖至此" hint-size="340px,220px"></x-import>
+    </div>
+
+    <div style="position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; animation:bounceCue 2s ease-in-out infinite;">
+      <span style="font:500 10px 'JetBrains Mono',monospace; letter-spacing:0.1em; color:rgba(11,11,18,.55);">SCROLL</span>
+      <div style="width:1px; height:26px; background:rgba(11,11,18,.4);"></div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div style="background:#101018; border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); padding:16px 0; overflow:hidden; white-space:nowrap;">
+    <div style="display:inline-flex; animation:marquee 22s linear infinite;">
+      <span style="font:600 15px 'Space Grotesk',sans-serif; color:rgba(255,255,255,.35); letter-spacing:0.04em; padding-right:40px;">PULSE X · 潮流玩家的選擇 · 2026 年上市 · 鈦金屬機身 · 全新 AI 運算晶片 · PULSE X · 潮流玩家的選擇 · 2026 年上市 · 鈦金屬機身 · 全新 AI 運算晶片 ·</span>
+      <span style="font:600 15px 'Space Grotesk',sans-serif; color:rgba(255,255,255,.35); letter-spacing:0.04em; padding-right:40px;">PULSE X · 潮流玩家的選擇 · 2026 年上市 · 鈦金屬機身 · 全新 AI 運算晶片 · PULSE X · 潮流玩家的選擇 · 2026 年上市 · 鈦金屬機身 · 全新 AI 運算晶片 ·</span>
+    </div>
+  </div>
+
+  <!-- ============ PRODUCT SHOWCASE ============ -->
+  <section ref="{{ showcaseRef }}" data-reveal-key="showcase" style="background:#0b0b12; padding:140px 64px;">
+    <div style="{{ showcaseHeadStyle }}">
+      <div style="font:700 12px 'JetBrains Mono',monospace; letter-spacing:0.1em; color:#8a3dff; margin-bottom:18px;">產品展示</div>
+      <h2 style="margin:0 0 20px; font:700 52px/1.15 'Space Grotesk',sans-serif; color:#f4f3f7; letter-spacing:-0.015em; max-width:680px;">每個角度,<br>都經得起放大檢視。</h2>
+      <p style="margin:0; font:400 17px/1.7 'Manrope',sans-serif; color:rgba(255,255,255,.55); max-width:520px;">鈦金屬邊框搭配霧面玻璃背板,PULSE X 的細節設計為潮流而生。</p>
+    </div>
+
+    <div style="{{ showcaseGridStyle }}">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="showcase-front" style="aspect-ratio:3/4;border-radius:20px" shape="rounded" radius="20" placeholder="拖曳正面渲染圖" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="showcase-back" style="aspect-ratio:3/4;border-radius:20px" shape="rounded" radius="20" placeholder="拖曳背面渲染圖" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="showcase-camera" style="aspect-ratio:3/4;border-radius:20px" shape="rounded" radius="20" placeholder="拖曳鏡頭模組特寫" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="showcase-buttons" style="aspect-ratio:3/4;border-radius:20px" shape="rounded" radius="20" placeholder="拖曳側邊按鍵特寫" hint-size="100%,100%"></x-import>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section ref="{{ featuresRef }}" data-reveal-key="features" style="{{ featuresStyle }}">
+    <div style="max-width:1280px; margin:0 auto;">
+      <div style="font:700 12px 'JetBrains Mono',monospace; letter-spacing:0.1em; color:#ff3dc0; margin-bottom:18px;">核心規格</div>
+      <h2 style="margin:0 0 64px; font:700 44px/1.15 'Space Grotesk',sans-serif; color:#f4f3f7; letter-spacing:-0.015em; max-width:640px;">效能與質感,一次到位。</h2>
+
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px;">
+        <div style="background:#0b0b12; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:28px 24px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#3d5cff,#8a3dff); margin-bottom:20px;"></div>
+          <div style="font:700 17px 'Space Grotesk',sans-serif; color:#f4f3f7; margin-bottom:8px;">鈦金屬邊框</div>
+          <div style="font:400 13.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.5);">輕量又耐刮,握感更沉穩。</div>
+        </div>
+        <div style="background:#0b0b12; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:28px 24px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#8a3dff,#ff3dc0); margin-bottom:20px;"></div>
+          <div style="font:700 17px 'Space Grotesk',sans-serif; color:#f4f3f7; margin-bottom:8px;">AI 運算晶片</div>
+          <div style="font:400 13.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.5);">即時運算,反應更快一步。</div>
+        </div>
+        <div style="background:#0b0b12; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:28px 24px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#ff3dc0,#3d5cff); margin-bottom:20px;"></div>
+          <div style="font:700 17px 'Space Grotesk',sans-serif; color:#f4f3f7; margin-bottom:8px;">120Hz 顯示</div>
+          <div style="font:400 13.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.5);">絲滑順暢,滑動零延遲。</div>
+        </div>
+        <div style="background:#0b0b12; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:28px 24px;">
+          <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#3d5cff,#ff3dc0); margin-bottom:20px;"></div>
+          <div style="font:700 17px 'Space Grotesk',sans-serif; color:#f4f3f7; margin-bottom:8px;">極速閃充</div>
+          <div style="font:400 13.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.5);">15 分鐘,續航一整天。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING CTA ============ -->
+  <section ref="{{ ctaRef }}" data-reveal-key="cta" style="{{ ctaStyle }}">
+    <div style="position:relative; z-index:1;">
+      <h2 style="margin:0 0 20px; font:700 56px/1.15 'Space Grotesk',sans-serif; color:#0b0b12; letter-spacing:-0.015em;">現在預購,搶先擁有。</h2>
+      <p style="margin:0 0 40px; font:500 17px/1.6 'Manrope',sans-serif; color:rgba(11,11,18,.75);">2026 年上市 · 現在預購享早鳥優惠</p>
+      <div style="display:inline-flex; font:700 16px 'Manrope',sans-serif; color:#fff; background:#0b0b12; padding:18px 40px; border-radius:999px; cursor:pointer;">立即預購 PULSE X</div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:#0b0b12; padding:40px 64px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,.06);">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:16px; height:16px; border-radius:5px; background:linear-gradient(135deg,#3d5cff,#8a3dff,#ff3dc0);"></div>
+      <span style="font:700 14px 'Space Grotesk',sans-serif; color:rgba(255,255,255,.5);">PULSE</span>
+    </div>
+    <span style="font:400 12.5px 'Manrope',sans-serif; color:rgba(255,255,255,.35);">© 2026 PULSE. All rights reserved.</span>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    mounted: false,
+    scrolled: false,
+    parallax: { x: 0, y: 0 },
+    revealed: { showcase: false, features: false, cta: false }
+  };
+
+  showcaseRef = (el) => { this.showcaseEl = el; };
+  featuresRef = (el) => { this.featuresEl = el; };
+  ctaRef = (el) => { this.ctaEl = el; };
+
+  componentDidMount() {
+    requestAnimationFrame(() => this.setState({ mounted: true }));
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const key = entry.target.dataset.revealKey;
+          this.setState((s) => ({ revealed: { ...s.revealed, [key]: true } }));
+          this.observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    [this.showcaseEl, this.featuresEl, this.ctaEl].forEach((el) => {
+      if (el) this.observer.observe(el);
+    });
+
+    this._onScroll = () => {
+      this.setState({ scrolled: window.scrollY > 40 });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+
+    this._onMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 24;
+      const y = (e.clientY / window.innerHeight - 0.5) * 24;
+      this.setState({ parallax: { x, y } });
+    };
+    window.addEventListener('mousemove', this._onMove);
+  }
+
+  componentWillUnmount() {
+    if (this.observer) this.observer.disconnect();
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ease = 'cubic-bezier(.16,1,.3,1)';
+
+    const reveal = (visible, delay = 0) => ({
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(46px)',
+      transition: `opacity 0.9s ${ease} ${delay}s, transform 0.9s ${ease} ${delay}s`
+    });
+
+    return {
+      navStyle: {
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '20px 64px',
+        background: s.scrolled ? 'rgba(11,11,18,0.75)' : 'transparent',
+        backdropFilter: s.scrolled ? 'blur(14px)' : 'none',
+        borderBottom: s.scrolled ? '1px solid rgba(255,255,255,.08)' : '1px solid transparent',
+        transition: 'background 0.4s ease, border-color 0.4s ease'
+      },
+      heroTextStyle: { position: 'relative', zIndex: 1, ...reveal(s.mounted, 0) },
+      heroVisualStyle: { position: 'relative', zIndex: 1, marginTop: 64, ...reveal(s.mounted, 0.15) },
+      heroBlobParallax: {
+        width: 340, height: 220, borderRadius: 24, position: 'relative',
+        transform: `translate(${s.parallax.x}px, ${s.parallax.y}px)`,
+        transition: 'transform 0.2s ease-out'
+      },
+      showcaseHeadStyle: { maxWidth: 1280, margin: '0 auto', ...reveal(s.revealed.showcase, 0) },
+      showcaseGridStyle: {
+        maxWidth: 1280, margin: '64px auto 0', display: 'grid',
+        gridTemplateColumns: 'repeat(4,1fr)', gap: 20,
+        ...reveal(s.revealed.showcase, 0.15)
+      },
+      featuresStyle: { background: '#101018', padding: '140px 64px', ...reveal(s.revealed.features, 0) },
+      ctaStyle: {
+        position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(120deg,#3d5cff,#8a3dff,#ff3dc0)',
+        backgroundSize: '220% 220%', animation: 'gradientShift 12s ease-in-out infinite',
+        padding: '160px 64px', textAlign: 'center',
+        ...reveal(s.revealed.cta, 0)
+      },
+      showcaseRef: this.showcaseRef,
+      featuresRef: this.featuresRef,
+      ctaRef: this.ctaRef
+    };
+  }
+}
+
+</script>
+</body>
+</html>

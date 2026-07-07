@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#efe9df; font-family:'Manrope',system-ui,sans-serif; }
+</style>
+</helmet>
+
+<div style="{{ stageStyle }}">
+  <div style="font:600 12px 'JetBrains Mono',monospace; letter-spacing:0.14em; color:rgba(20,18,26,.4);">DRIFT · 注意力漂移 APP 原型</div>
+
+  <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ deviceWidth }}" height="{{ deviceHeight }}" dark="{{ true }}" hint-size="402px,874px">
+    <div ref="{{ appShellRef }}" style="{{ appShellStyle }}">
+
+      <div style="{{ contentScrollStyle }}">
+
+        <!-- ============ HOME ============ -->
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+          <div data-screen-label="Home" style="{{ homeStyle }}">
+            <div style="{{ introBlockStyle }}">
+              <div style="font:500 13px 'Manrope',sans-serif; color:rgba(255,255,255,.4);">晚安</div>
+              <div style="{{ titleTextStyle }}">讓思緒慢慢漂開。</div>
+              <div style="font:400 12.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.4); margin-top:8px;">不是叫自己「什麼都不想」——那通常更難。讓注意力被柔軟、沒有意義、不斷漂移的畫面帶走,思緒就會慢慢鬆開。</div>
+            </div>
+
+            <div style="{{ glowWrapStyle }}">
+              <canvas ref="{{ glowRef }}" width="{{ glowCanvasSize }}" height="{{ glowCanvasSize }}" style="{{ glowCanvasStyle }}"></canvas>
+            </div>
+
+            <div style="{{ statusBlockStyle }}">
+              <span style="font:600 13px 'JetBrains Mono',monospace; color:rgba(255,255,255,.6);">{{ statusText }}</span>
+              <sc-if value="{{ isModeListen }}" hint-placeholder-val="{{ true }}">
+                <span style="font:400 11px 'Manrope',sans-serif; color:rgba(255,255,255,.32);">僅分析音量大小,不錄音、不上傳</span>
+              </sc-if>
+              <span style="font:400 10.5px 'JetBrains Mono',monospace; letter-spacing:0.04em; color:rgba(255,176,140,.5);">畫面刻意隨機、無意義 · 佔住注意力,不刺激情緒</span>
+            </div>
+
+            <div style="{{ modeSwitchStyle }}">
+              <div onClick="{{ setModeListen }}" style="{{ segListenStyle }}">聆聽房間</div>
+              <div onClick="{{ setModePlay }}" style="{{ segPlayStyle }}">播放音效</div>
+            </div>
+
+            <div onClick="{{ primaryAction }}" style="{{ primaryBtnStyle }}">
+              <sc-if value="{{ showPause }}" hint-placeholder-val="{{ false }}">
+                <svg width="24" height="24" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1" fill="#fff"></rect><rect x="14" y="5" width="4" height="14" rx="1" fill="#fff"></rect></svg>
+              </sc-if>
+              <sc-if value="{{ showMic }}" hint-placeholder-val="{{ true }}">
+                <svg width="22" height="24" viewBox="0 0 24 26"><rect x="8" y="0" width="8" height="14" rx="4" fill="#fff"></rect><path d="M4 11a8 8 0 0 0 16 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"></path><line x1="12" y1="19" x2="12" y2="24" stroke="#fff" stroke-width="2" stroke-linecap="round"></line></svg>
+              </sc-if>
+              <sc-if value="{{ showPlay }}" hint-placeholder-val="{{ false }}">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"></path></svg>
+              </sc-if>
+            </div>
+
+            <div style="{{ sessionPanelStyle }}">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:14px;">
+                <div style="min-width:0;">
+                  <div style="font:700 13px 'Manrope',sans-serif; color:#f3efe9;">睡前模式</div>
+                  <div style="font:400 11px/1.5 'Manrope',sans-serif; color:rgba(255,255,255,.42); margin-top:2px;">{{ sessionHintText }}</div>
+                </div>
+                <div onClick="{{ toggleSleepSession }}" style="{{ sessionToggleStyle }}">{{ sessionToggleLabel }}</div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                <div style="font:600 11.5px 'JetBrains Mono',monospace; color:rgba(255,255,255,.5);">螢幕 {{ dimStateLabel }}</div>
+                <div onClick="{{ toggleDim }}" style="{{ dimButtonStyle }}">{{ dimButtonLabel }}</div>
+              </div>
+
+              <sc-if value="{{ isModePlay }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span style="font:600 11.5px 'JetBrains Mono',monospace; color:rgba(255,255,255,.5);">音量</span>
+                    <span style="font:600 11.5px 'JetBrains Mono',monospace; color:#ffb06a;">{{ volumePercent }}%</span>
+                  </div>
+                  <input type="range" min="0" max="100" value="{{ volumePercent }}" onInput="{{ changeVolume }}" style="{{ volumeSliderStyle }}">
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ isModePlay }}" hint-placeholder-val="{{ false }}">
+              <div onClick="{{ goSounds }}" style="{{ soundLinkStyle }}">目前:{{ activeSoundLabel }} · 更換聲音 ›</div>
+            </sc-if>
+
+            <sc-if value="{{ timerActive }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ timerPillStyle }}">
+                <span style="width:6px; height:6px; border-radius:50%; background:#ffb06a;"></span>
+                <span style="font:600 11.5px 'JetBrains Mono',monospace; color:rgba(255,255,255,.6);">計時中 · 剩餘 {{ timerRemainingText }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ============ SOUNDS ============ -->
+        <sc-if value="{{ isSounds }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Sounds" style="{{ soundsScreenStyle }}">
+            <div style="font:700 20px 'Space Grotesk',sans-serif; color:#f3efe9;">自然音效庫</div>
+            <div style="{{ soundListStyle }}">
+              <sc-for list="{{ soundCatalog }}" as="s" hint-placeholder-count="4">
+                <div onClick="{{ s.select }}" style="{{ s.cardStyle }}">
+                  <div style="{{ s.dotStyle }}"></div>
+                  <div style="flex:1; min-width:0;">
+                    <div style="font:700 14px 'Manrope',sans-serif; color:#f3efe9;">{{ s.label }}</div>
+                    <div style="font:400 11.5px/1.5 'Manrope',sans-serif; color:rgba(255,255,255,.42); margin-top:2px;">{{ s.desc }}</div>
+                  </div>
+                  <sc-if value="{{ s.selected }}" hint-placeholder-val="{{ false }}">
+                    <span style="font:700 11px 'JetBrains Mono',monospace; color:#ffb06a;">播放中</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ============ TIMER ============ -->
+        <sc-if value="{{ isTimer }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Timer" style="{{ timerScreenStyle }}">
+            <div style="font:700 20px 'Space Grotesk',sans-serif; color:#f3efe9;">睡眠計時器</div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <sc-for list="{{ timerPresets }}" as="p" hint-placeholder-count="5">
+                <div onClick="{{ p.select }}" style="{{ p.style }}">{{ p.label }}</div>
+              </sc-for>
+            </div>
+            <div style="font:400 12.5px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.4);">時間到會緩緩淡出聲音,不會突然中斷吵醒你。</div>
+
+            <sc-if value="{{ timerActive }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:14px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:24px;">
+                <div style="font:700 34px 'Space Grotesk',sans-serif; color:#f3efe9;">{{ timerRemainingText }}</div>
+                <div onClick="{{ cancelTimer }}" style="font:700 13px 'Manrope',sans-serif; color:#ff9a8a; cursor:pointer; user-select:none;">取消計時</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ timerNotActive }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ startTimerHandler }}" style="text-align:center; font:700 14px 'Manrope',sans-serif; color:#181622; background:linear-gradient(135deg,#ffb06e,#ff8f7a); padding:15px; border-radius:999px; cursor:pointer; user-select:none;">開始倒數 · {{ selectedPresetLabel }}</div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <sc-if value="{{ screenDimmed }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background:rgba(4,4,10,.48); pointer-events:none; z-index:2;"></div>
+      </sc-if>
+
+      <sc-if value="{{ phoneImmersiveActive }}" hint-placeholder-val="{{ false }}">
+        <div style="{{ immersiveStyle }}">
+          <div style="{{ immersiveTopStyle }}">
+            <span style="font:700 12px 'JetBrains Mono',monospace; letter-spacing:0.16em; color:rgba(255,255,255,.42);">DRIFT</span>
+            <span style="font:600 12px 'Manrope',sans-serif; color:rgba(255,255,255,.46);">{{ immersiveModeLabel }}</span>
+          </div>
+
+          <canvas ref="{{ immersiveGlowRef }}" width="{{ immersiveCanvasSize }}" height="{{ immersiveCanvasSize }}" style="{{ immersiveCanvasStyle }}"></canvas>
+
+          <div style="text-align:center; display:flex; flex-direction:column; gap:7px;">
+            <div style="font:700 18px 'Space Grotesk',sans-serif; color:#f3efe9;">{{ immersiveStatusText }}</div>
+            <div style="font:400 12px/1.6 'Manrope',sans-serif; color:rgba(255,255,255,.42); max-width:250px;">{{ immersiveSubText }}</div>
+          </div>
+
+          <div onClick="{{ exitImmersive }}" style="{{ immersiveExitStyle }}">結束</div>
+        </div>
+      </sc-if>
+
+      <!-- ============ TAB BAR ============ -->
+      <sc-if value="{{ showTabBar }}" hint-placeholder-val="{{ true }}">
+        <div style="{{ tabBarStyle }}">
+          <div onClick="{{ goHome }}" style="display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; user-select:none; color:{{ tabHomeColor }};">
+            <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"></circle><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.4"></circle></svg>
+            <span style="font:600 10px 'Manrope',sans-serif;">首頁</span>
+          </div>
+          <div onClick="{{ goSoundsTab }}" style="display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; user-select:none; color:{{ tabSoundsColor }};">
+            <svg width="20" height="20" viewBox="0 0 24 24"><rect x="4" y="9" width="3" height="6" rx="1.5" fill="currentColor"></rect><rect x="10.5" y="5" width="3" height="14" rx="1.5" fill="currentColor"></rect><rect x="17" y="8" width="3" height="8" rx="1.5" fill="currentColor"></rect></svg>
+            <span style="font:600 10px 'Manrope',sans-serif;">音效</span>
+          </div>
+          <div onClick="{{ goTimerTab }}" style="display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; user-select:none; color:{{ tabTimerColor }};">
+            <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span style="font:600 10px 'Manrope',sans-serif;">計時</span>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 520, &quot;height&quot;: 980}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home',
+    mode: 'listen',
+    micActive: false,
+    micStatus: '尚未啟動 · 點擊下方開始',
+    soundPlaying: false,
+    selectedSound: 'rain',
+    volume: 0.7,
+    screenDimmed: false,
+    sleepSessionActive: false,
+    timerMinutes: 30,
+    timerActive: false,
+    timerRemaining: 0,
+    viewportWidth: typeof window !== 'undefined' ? window.innerWidth : 402,
+    viewportHeight: typeof window !== 'undefined' ? window.innerHeight : 874
+  };
+
+  soundDefs = [
+    { id: 'rain', label: '雨聲', desc: '細緻雨滴質感,溫柔遮蔽突發聲響', color: '255,176,110' },
+    { id: 'ocean', label: '海浪', desc: '深沉起伏,模擬海浪韻律', color: '255,143,122' },
+    { id: 'wind', label: '風聲', desc: '輕柔氣流,時強時弱像呼吸', color: '255,201,168' },
+    { id: 'pink', label: '柔化白噪音', desc: '均勻背景音,經過濾波更柔和', color: '255,217,168' }
+  ];
+
+  timerPresetDefs = [
+    { minutes: 15, label: '15 分鐘' },
+    { minutes: 30, label: '30 分鐘' },
+    { minutes: 45, label: '45 分鐘' },
+    { minutes: 60, label: '1 小時' },
+    { minutes: 480, label: '整夜' }
+  ];
+
+  // --- tiny seeded 1D Perlin-style noise: smooth, continuous, re-seeded per load ---
+  makeNoise() {
+    const p = Array.from({ length: 256 }, (_, i) => i);
+    for (let i = 255; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [p[i], p[j]] = [p[j], p[i]];
+    }
+    const perm = new Uint8Array(512);
+    for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+    const fade = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+    const lerp = (a, b, t) => a + t * (b - a);
+    const grad = (h, x) => ((h & 1) === 0 ? x : -x);
+    return (x) => {
+      const X = Math.floor(x) & 255;
+      const xf = x - Math.floor(x);
+      const u = fade(xf);
+      const a = perm[X], b = perm[X + 1];
+      return lerp(grad(a, xf), grad(b, xf - 1), u);
+    };
+  }
+
+  ensureAudioCtx() {
+    if (!this.audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.audioCtx = new AC();
+    }
+    return this.audioCtx;
+  }
+
+  appShellRef = (el) => {
+    this.appShellEl = el;
+  };
+
+  componentDidMount() {
+    this._onResize = () => {
+      this.setState({ viewportWidth: window.innerWidth, viewportHeight: window.innerHeight });
+    };
+    window.addEventListener('resize', this._onResize, { passive: true });
+  }
+
+  isTabletViewport() {
+    const w = this.state.viewportWidth || window.innerWidth;
+    const h = this.state.viewportHeight || window.innerHeight;
+    return Math.min(w, h) >= 700 || w >= 900;
+  }
+
+  enterMobileFullscreen() {
+    if (this.isTabletViewport()) return;
+    const target = this.appShellEl || document.documentElement;
+    const request = target.requestFullscreen || target.webkitRequestFullscreen;
+    const active = document.fullscreenElement || document.webkitFullscreenElement;
+    if (request && !active) {
+      try {
+        const result = request.call(target);
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+      } catch (e) {}
+    }
+  }
+
+  exitBrowserFullscreen() {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    const active = document.fullscreenElement || document.webkitFullscreenElement;
+    if (exit && active) {
+      try {
+        const result = exit.call(document);
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+      } catch (e) {}
+    }
+  }
+
+  baseGainFor(id) {
+    if (id === 'ocean') return 0.26;
+    if (id === 'wind') return 0.2;
+    if (id === 'pink') return 0.22;
+    return 0.24;
+  }
+
+  applySoundVolume(volume = this.state.volume) {
+    if (!this.soundGain || !this.audioCtx) return;
+    const target = this.baseGainFor(this.state.selectedSound) * volume;
+    this.soundGain.gain.setTargetAtTime(target, this.audioCtx.currentTime, 0.08);
+  }
+
+  changeVolume = (e) => {
+    const raw = Number(e.target.value);
+    const volume = Math.max(0, Math.min(1, Number.isFinite(raw) ? raw / 100 : this.state.volume));
+    this.setState({ volume });
+    this.applySoundVolume(volume);
+  };
+
+  toggleDim = () => {
+    this.setState((s) => ({ screenDimmed: !s.screenDimmed }));
+  };
+
+  startSleepSession = () => {
+    this.enterMobileFullscreen();
+    this.setState({ screen: 'home', sleepSessionActive: true, screenDimmed: true });
+    if (this.state.mode === 'listen' && !this.state.micActive) {
+      this.startMic();
+    }
+    if (this.state.mode === 'play' && !this.state.soundPlaying) {
+      this.playSound(this.state.selectedSound);
+    }
+    if (!this.state.timerActive) {
+      this.startTimerHandler();
+    }
+  };
+
+  endSleepSession = () => {
+    this.cancelTimer();
+    this.stopSound();
+    this.stopMic();
+    this.exitBrowserFullscreen();
+    this.setState({ sleepSessionActive: false, screenDimmed: false });
+  };
+
+  toggleSleepSession = () => {
+    if (this.state.sleepSessionActive) this.endSleepSession();
+    else this.startSleepSession();
+  };
+
+  generatePinkNoiseBuffer(ctx, seconds) {
+    const bufferSize = ctx.sampleRate * seconds;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      let pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+      pink *= 0.11;
+      b6 = white * 0.115926;
+      data[i] = pink;
+    }
+    return buffer;
+  }
+
+  generateBrownNoiseBuffer(ctx, seconds) {
+    const bufferSize = ctx.sampleRate * seconds;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      data[i] = (last + 0.02 * white) / 1.02;
+      last = data[i];
+      data[i] *= 3.2;
+    }
+    return buffer;
+  }
+
+  generateWhiteNoiseBuffer(ctx, seconds) {
+    const bufferSize = ctx.sampleRate * seconds;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    return buffer;
+  }
+
+  playSound(id) {
+    this.stopSound();
+    const ctx = this.ensureAudioCtx();
+    const gain = ctx.createGain();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 1024;
+    let source, lfo;
+
+    if (id === 'ocean') {
+      source = ctx.createBufferSource();
+      source.buffer = this.generateBrownNoiseBuffer(ctx, 6);
+      source.loop = true;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 700;
+      lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.09;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 0.1;
+      lfo.connect(lfoGain);
+      lfoGain.connect(gain.gain);
+      lfo.start();
+      source.connect(filter);
+      filter.connect(gain);
+      gain.gain.value = 0.26;
+    } else if (id === 'wind') {
+      source = ctx.createBufferSource();
+      source.buffer = this.generateWhiteNoiseBuffer(ctx, 6);
+      source.loop = true;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 600;
+      filter.Q.value = 0.9;
+      lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.06;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 350;
+      lfo.connect(lfoGain);
+      lfoGain.connect(filter.frequency);
+      lfo.start();
+      source.connect(filter);
+      filter.connect(gain);
+      gain.gain.value = 0.2;
+    } else if (id === 'pink') {
+      source = ctx.createBufferSource();
+      source.buffer = this.generatePinkNoiseBuffer(ctx, 6);
+      source.loop = true;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 3800;
+      source.connect(filter);
+      filter.connect(gain);
+      gain.gain.value = 0.22;
+    } else {
+      source = ctx.createBufferSource();
+      source.buffer = this.generatePinkNoiseBuffer(ctx, 6);
+      source.loop = true;
+      const hp = ctx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.value = 500;
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 5200;
+      source.connect(hp);
+      hp.connect(lp);
+      lp.connect(gain);
+      gain.gain.value = 0.24;
+    }
+
+    gain.gain.value = this.baseGainFor(id) * this.state.volume;
+
+    gain.connect(analyser);
+    analyser.connect(ctx.destination);
+    source.start(0);
+
+    this.soundSource = source;
+    this.soundGain = gain;
+    this.soundLfo = lfo || null;
+    this.soundAnalyser = analyser;
+    this.soundData = new Uint8Array(analyser.fftSize);
+    this.setState({ soundPlaying: true, selectedSound: id });
+  }
+
+  stopSound() {
+    if (this.soundSource) { try { this.soundSource.stop(); } catch (e) {} this.soundSource.disconnect(); }
+    if (this.soundLfo) { try { this.soundLfo.stop(); } catch (e) {} this.soundLfo.disconnect(); }
+    if (this.soundGain) this.soundGain.disconnect();
+    if (this.soundAnalyser) this.soundAnalyser.disconnect();
+    this.soundSource = null;
+    this.soundLfo = null;
+    this.soundGain = null;
+    this.soundAnalyser = null;
+    if (this.state.soundPlaying) this.setState({ soundPlaying: false });
+  }
+
+  getSoundLevel() {
+    if (!this.soundAnalyser) return 0;
+    this.soundAnalyser.getByteTimeDomainData(this.soundData);
+    let sum = 0;
+    for (let i = 0; i < this.soundData.length; i++) {
+      const v = (this.soundData[i] - 128) / 128;
+      sum += v * v;
+    }
+    return Math.sqrt(sum / this.soundData.length);
+  }
+
+  startMic = async () => {
+    try {
+      this.setState({ micStatus: '請求麥克風權限中…' });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.micStream = stream;
+      const ctx = this.ensureAudioCtx();
+      const source = ctx.createMediaStreamSource(stream);
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      source.connect(analyser); // not connected to destination — nothing plays back
+      this.micSource = source;
+      this.micAnalyser = analyser;
+      this.micData = new Uint8Array(analyser.fftSize);
+      this.setState({ micActive: true, micStatus: '聆聽中 · 房間很安靜' });
+    } catch (err) {
+      this.setState({ micActive: false, micStatus: '權限被拒絕或裝置不支援麥克風' });
+    }
+  };
+
+  stopMic = () => {
+    if (this.micStream) this.micStream.getTracks().forEach((t) => t.stop());
+    if (this.micSource) this.micSource.disconnect();
+    if (this.micAnalyser) this.micAnalyser.disconnect();
+    this.micStream = null;
+    this.micSource = null;
+    this.micAnalyser = null;
+    this.setState({ micActive: false, micStatus: '已停止 · 點擊重新開始' });
+  };
+
+  toggleMic = () => {
+    if (this.state.micActive) this.stopMic(); else this.startMic();
+  };
+
+  getMicLevel() {
+    if (!this.micAnalyser) return 0;
+    this.micAnalyser.getByteTimeDomainData(this.micData);
+    let sum = 0;
+    for (let i = 0; i < this.micData.length; i++) {
+      const v = (this.micData[i] - 128) / 128;
+      sum += v * v;
+    }
+    return Math.sqrt(sum / this.micData.length);
+  }
+
+  setModeListen = () => {
+    if (this.state.soundPlaying) this.stopSound();
+    this.setState({ mode: 'listen' });
+  };
+
+  setModePlay = () => {
+    if (this.state.micActive) this.stopMic();
+    this.setState({ mode: 'play' });
+  };
+
+  primaryAction = () => {
+    if (this.state.mode === 'listen') {
+      if (!this.state.micActive) this.enterMobileFullscreen();
+      else this.exitBrowserFullscreen();
+      this.toggleMic();
+    }
+    else if (this.state.soundPlaying) {
+      this.stopSound();
+      if (this.state.sleepSessionActive) this.setState({ sleepSessionActive: false, screenDimmed: false });
+      this.exitBrowserFullscreen();
+    }
+    else {
+      this.enterMobileFullscreen();
+      this.playSound(this.state.selectedSound);
+    }
+  };
+
+  selectSoundAndPlay(id) {
+    if (this.state.micActive) this.stopMic();
+    this.setState({ mode: 'play', selectedSound: id, screen: 'home' });
+    this.enterMobileFullscreen();
+    this.playSound(id);
+  }
+
+  exitImmersive = () => {
+    this.endSleepSession();
+  };
+
+  goHome = () => this.setState({ screen: 'home' });
+  goSounds = () => this.setState({ screen: 'sounds' });
+  goTimerTab = () => this.setState({ screen: 'timer' });
+
+  formatTime(totalSeconds) {
+    const m = Math.floor(totalSeconds / 60);
+    const sec = totalSeconds % 60;
+    return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+  }
+
+  startTimerHandler = () => {
+    const minutes = this.state.timerMinutes;
+    const totalSeconds = minutes * 60;
+    if (this._timerInterval) clearInterval(this._timerInterval);
+    this.setState({ timerActive: true, timerRemaining: totalSeconds });
+    this._timerInterval = setInterval(() => {
+      this.setState((s) => {
+        const remaining = s.timerRemaining - 1;
+        if (remaining === 60 && this.soundGain && this.audioCtx) {
+          this.soundGain.gain.setTargetAtTime(0.0001, this.audioCtx.currentTime, 20);
+        }
+        if (remaining <= 0) {
+          clearInterval(this._timerInterval);
+          this._timerInterval = null;
+          if (s.soundPlaying) this.stopSound();
+          if (s.micActive) this.stopMic();
+          this.exitBrowserFullscreen();
+          return { timerActive: false, timerRemaining: 0, sleepSessionActive: false, screenDimmed: false };
+        }
+        return { timerRemaining: remaining };
+      });
+    }, 1000);
+  };
+
+  cancelTimer = () => {
+    if (this._timerInterval) { clearInterval(this._timerInterval); this._timerInterval = null; }
+    this.setState({ timerActive: false, timerRemaining: 0, sleepSessionActive: false, screenDimmed: false });
+    this.exitBrowserFullscreen();
+    this.applySoundVolume();
+  };
+
+  glowRef = (el) => {
+    if (el) {
+      this.startGlow(el);
+    } else if (this._glowRaf) {
+      cancelAnimationFrame(this._glowRaf);
+      this._glowRaf = null;
+    }
+  };
+
+  immersiveGlowRef = (el) => {
+    if (el) {
+      this.startGlow(el, '_immersiveGlowRaf');
+    } else if (this._immersiveGlowRaf) {
+      cancelAnimationFrame(this._immersiveGlowRaf);
+      this._immersiveGlowRaf = null;
+    }
+  };
+
+  startGlow(canvas, rafKey = '_glowRaf') {
+    if (this[rafKey]) cancelAnimationFrame(this[rafKey]);
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const blobs = Array.from({ length: 3 }, () => ({
+      cx: 0.3 + Math.random() * 0.4,
+      cy: 0.3 + Math.random() * 0.4,
+      rBase: 0.24 + Math.random() * 0.08,
+      speed: 0.00012 + Math.random() * 0.00018,
+      nx: this.makeNoise(), ny: this.makeNoise(),
+      seedX: Math.random() * 1000, seedY: Math.random() * 1000
+    }));
+    const idleNoise = this.makeNoise();
+    const draw = (t) => {
+      let level, colorSet;
+      if (this.state.mode === 'listen' && this.state.micActive) {
+        level = this.getMicLevel();
+        colorSet = ['255,143,150', '255,176,110', '255,201,180'];
+      } else if (this.state.mode === 'play' && this.state.soundPlaying) {
+        level = this.getSoundLevel();
+        colorSet = ['255,176,110', '255,143,122', '255,217,168'];
+      } else {
+        level = 0.1 + (idleNoise(t * 0.0004) + 1) * 0.03;
+        colorSet = ['255,190,150', '255,160,140', '255,210,180'];
+      }
+      const boost = 1 + level * 2.8;
+      ctx.fillStyle = '#12111a';
+      ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter';
+      blobs.forEach((b, i) => {
+        const nt = t * b.speed;
+        const x = (b.cx + b.nx(b.seedX + nt) * 0.16) * w;
+        const y = (b.cy + b.ny(b.seedY + nt * 0.85) * 0.16) * h;
+        const r = Math.max(b.rBase * w * boost, 4);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        const c = colorSet[i % colorSet.length];
+        g.addColorStop(0, `rgba(${c},${Math.min(0.85, 0.3 + level * 1.1)})`);
+        g.addColorStop(1, `rgba(${c},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.globalCompositeOperation = 'source-over';
+      this[rafKey] = requestAnimationFrame(draw);
+    };
+    this[rafKey] = requestAnimationFrame(draw);
+  }
+
+  componentWillUnmount() {
+    if (this._glowRaf) cancelAnimationFrame(this._glowRaf);
+    if (this._immersiveGlowRaf) cancelAnimationFrame(this._immersiveGlowRaf);
+    if (this._timerInterval) clearInterval(this._timerInterval);
+    if (this._onResize) window.removeEventListener('resize', this._onResize);
+    this.stopSound();
+    this.stopMic();
+    this.exitBrowserFullscreen();
+    if (this.audioCtx) this.audioCtx.close();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isHome = s.screen === 'home';
+    const isSounds = s.screen === 'sounds';
+    const isTimer = s.screen === 'timer';
+    const isModeListen = s.mode === 'listen';
+    const isModePlay = s.mode === 'play';
+    const viewportW = s.viewportWidth || 402;
+    const viewportH = s.viewportHeight || 874;
+    const isTabletLayout = Math.min(viewportW, viewportH) >= 700 || viewportW >= 900;
+    const phoneImmersiveActive = !isTabletLayout && isHome && (s.sleepSessionActive || s.micActive || s.soundPlaying);
+    const deviceWidth = isTabletLayout ? Math.min(920, Math.max(720, viewportW - 96)) : 402;
+    const deviceHeight = isTabletLayout ? Math.min(1100, Math.max(760, viewportH - 118)) : 874;
+    const glowCanvasSize = isTabletLayout ? 340 : 240;
+    const immersiveCanvasSize = 310;
+
+    const activeSoundDef = this.soundDefs.find((d) => d.id === s.selectedSound) || this.soundDefs[0];
+    const selectedPreset = this.timerPresetDefs.find((p) => p.minutes === s.timerMinutes) || this.timerPresetDefs[1];
+    const volumePercent = Math.round(s.volume * 100);
+
+    let statusText;
+    if (isModeListen) {
+      statusText = s.micStatus;
+    } else {
+      statusText = s.soundPlaying ? `播放中 · ${activeSoundDef.label}` : '點擊下方開始播放';
+    }
+
+    let sessionHintText;
+    if (s.sleepSessionActive) {
+      sessionHintText = s.timerActive ? `進行中 · 剩餘 ${this.formatTime(s.timerRemaining)}` : '進行中 · 不使用倒數';
+    } else if (isModePlay) {
+      sessionHintText = `${activeSoundDef.label} · ${selectedPreset.label} 後淡出`;
+    } else {
+      sessionHintText = '只分析房間音量,畫面跟著環境呼吸';
+    }
+
+    const segBase = {
+      flex: 1, textAlign: 'center', padding: '10px 0', borderRadius: 999,
+      font: "600 13px 'Manrope',sans-serif", cursor: 'pointer', userSelect: 'none',
+      transition: 'background 0.25s ease, color 0.25s ease', whiteSpace: 'nowrap'
+    };
+    const segListenStyle = {
+      ...segBase,
+      background: isModeListen ? 'rgba(255,255,255,0.94)' : 'transparent',
+      color: isModeListen ? '#181622' : 'rgba(255,255,255,0.55)'
+    };
+    const segPlayStyle = {
+      ...segBase,
+      background: isModePlay ? 'rgba(255,255,255,0.94)' : 'transparent',
+      color: isModePlay ? '#181622' : 'rgba(255,255,255,0.55)'
+    };
+
+    const primaryActive = isModeListen ? s.micActive : s.soundPlaying;
+    const primaryBtnStyle = {
+      gridArea: 'action',
+      width: 84, height: 84, borderRadius: '50%',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      justifySelf: isTabletLayout ? 'start' : 'center',
+      cursor: 'pointer', userSelect: 'none',
+      background: primaryActive ? 'linear-gradient(135deg,#ffb06e,#ff8f7a)' : 'rgba(255,255,255,0.08)',
+      border: primaryActive ? 'none' : '1px solid rgba(255,255,255,0.16)',
+      boxShadow: primaryActive ? '0 8px 30px rgba(255,140,110,0.35)' : 'none',
+      transition: 'all 0.3s ease'
+    };
+
+    const sessionPanelStyle = {
+      gridArea: 'session',
+      width: '100%',
+      display: 'flex', flexDirection: 'column', gap: 14,
+      padding: '16px',
+      borderRadius: 20,
+      background: s.sleepSessionActive ? 'rgba(255,176,106,0.12)' : 'rgba(255,255,255,0.045)',
+      border: s.sleepSessionActive ? '1px solid rgba(255,176,106,0.36)' : '1px solid rgba(255,255,255,0.08)',
+      boxShadow: s.sleepSessionActive ? '0 16px 34px rgba(255,140,110,0.12)' : 'none'
+    };
+
+    const sessionToggleStyle = {
+      flexShrink: 0,
+      font: "700 12px 'Manrope',sans-serif",
+      color: s.sleepSessionActive ? '#181622' : '#f3efe9',
+      background: s.sleepSessionActive ? 'linear-gradient(135deg,#ffb06e,#ff8f7a)' : 'rgba(255,255,255,0.08)',
+      border: s.sleepSessionActive ? 'none' : '1px solid rgba(255,255,255,0.12)',
+      borderRadius: 999,
+      padding: '9px 13px',
+      cursor: 'pointer',
+      userSelect: 'none',
+      whiteSpace: 'nowrap'
+    };
+
+    const dimButtonStyle = {
+      flexShrink: 0,
+      font: "700 11.5px 'Manrope',sans-serif",
+      color: s.screenDimmed ? '#181622' : 'rgba(255,255,255,0.72)',
+      background: s.screenDimmed ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.07)',
+      border: '1px solid rgba(255,255,255,0.12)',
+      borderRadius: 999,
+      padding: '7px 12px',
+      cursor: 'pointer',
+      userSelect: 'none',
+      whiteSpace: 'nowrap'
+    };
+
+    const volumeSliderStyle = {
+      width: '100%',
+      accentColor: '#ffb06a',
+      cursor: 'pointer'
+    };
+
+    const stageStyle = {
+      minHeight: '100vh',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: 18,
+      padding: isTabletLayout ? '38px 32px' : '48px 24px',
+      background: '#efe9df'
+    };
+
+    const contentScrollStyle = {
+      position: 'absolute', inset: 0,
+      padding: isTabletLayout ? '78px 46px 122px' : '64px 24px 108px',
+      overflowY: 'auto',
+      display: phoneImmersiveActive ? 'none' : 'block'
+    };
+
+    const homeStyle = isTabletLayout ? {
+      display: 'grid',
+      gridTemplateColumns: 'minmax(260px, 0.9fr) minmax(340px, 1.1fr)',
+      gridTemplateAreas: '"intro visual" "mode visual" "session visual" "action status" "link timer"',
+      alignItems: 'center',
+      columnGap: 42,
+      rowGap: 18,
+      minHeight: '100%'
+    } : {
+      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24
+    };
+
+    const introBlockStyle = {
+      gridArea: 'intro',
+      width: '100%',
+      alignSelf: isTabletLayout ? 'end' : 'auto'
+    };
+
+    const titleTextStyle = {
+      font: isTabletLayout ? "700 30px/1.15 'Space Grotesk',sans-serif" : "700 21px 'Space Grotesk',sans-serif",
+      color: '#f3efe9',
+      marginTop: 2
+    };
+
+    const glowWrapStyle = {
+      gridArea: 'visual',
+      justifySelf: 'center',
+      alignSelf: 'center',
+      width: glowCanvasSize,
+      height: glowCanvasSize,
+      borderRadius: '50%',
+      overflow: 'hidden',
+      boxShadow: isTabletLayout ? '0 26px 80px rgba(255,140,110,.16)' : '0 20px 60px rgba(255,140,110,.12)'
+    };
+
+    const glowCanvasStyle = {
+      display: 'block',
+      width: glowCanvasSize,
+      height: glowCanvasSize
+    };
+
+    const statusBlockStyle = {
+      gridArea: 'status',
+      textAlign: isTabletLayout ? 'left' : 'center',
+      minHeight: 34,
+      display: 'flex', flexDirection: 'column', gap: 4,
+      justifySelf: isTabletLayout ? 'start' : 'center'
+    };
+
+    const modeSwitchStyle = {
+      gridArea: 'mode',
+      display: 'flex',
+      width: '100%',
+      background: 'rgba(255,255,255,.06)',
+      borderRadius: 999,
+      padding: 4,
+      gap: 4
+    };
+
+    const soundLinkStyle = {
+      gridArea: 'link',
+      font: "600 12.5px 'Manrope',sans-serif",
+      color: 'rgba(255,255,255,.55)',
+      cursor: 'pointer',
+      userSelect: 'none',
+      justifySelf: isTabletLayout ? 'start' : 'center'
+    };
+
+    const timerPillStyle = {
+      gridArea: 'timer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      background: 'rgba(255,255,255,.05)',
+      border: '1px solid rgba(255,255,255,.1)',
+      borderRadius: 999,
+      padding: '8px 16px',
+      justifySelf: isTabletLayout ? 'start' : 'center'
+    };
+
+    const soundsScreenStyle = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 18,
+      maxWidth: isTabletLayout ? 760 : 'none',
+      margin: isTabletLayout ? '0 auto' : 0
+    };
+
+    const soundListStyle = {
+      display: 'grid',
+      gridTemplateColumns: isTabletLayout ? 'repeat(2,minmax(0,1fr))' : '1fr',
+      gap: 10
+    };
+
+    const timerScreenStyle = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 20,
+      maxWidth: isTabletLayout ? 560 : 'none',
+      margin: isTabletLayout ? '0 auto' : 0
+    };
+
+    const tabBarStyle = {
+      position: 'absolute', left: 0, right: 0, bottom: 34, zIndex: 3,
+      display: 'flex', alignItems: 'center', justifyContent: 'space-around',
+      padding: isTabletLayout ? '13px 110px' : '12px 20px',
+      background: 'rgba(18,17,26,.82)',
+      backdropFilter: 'blur(16px)',
+      borderTop: '1px solid rgba(255,255,255,.06)'
+    };
+
+    const immersiveStyle = {
+      position: 'absolute', inset: 0, zIndex: 20,
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'space-between',
+      padding: '76px 28px 54px',
+      background: 'radial-gradient(circle at 50% 42%, rgba(255,143,122,.18), transparent 44%), #08070d'
+    };
+
+    const immersiveTopStyle = {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    };
+
+    const immersiveCanvasStyle = {
+      display: 'block',
+      width: immersiveCanvasSize,
+      height: immersiveCanvasSize,
+      borderRadius: '50%',
+      boxShadow: '0 28px 90px rgba(255,140,110,.18)'
+    };
+
+    const immersiveExitStyle = {
+      font: "700 14px 'Manrope',sans-serif",
+      color: '#181622',
+      background: 'rgba(255,255,255,0.9)',
+      borderRadius: 999,
+      padding: '13px 30px',
+      cursor: 'pointer',
+      userSelect: 'none'
+    };
+
+    const soundCatalog = this.soundDefs.map((d) => ({
+      ...d,
+      selected: d.id === s.selectedSound && s.soundPlaying,
+      cardStyle: {
+        display: 'flex', alignItems: 'center', gap: 14, padding: '16px',
+        borderRadius: 18,
+        background: d.id === s.selectedSound ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+        border: d.id === s.selectedSound ? `1px solid rgba(${d.color},0.5)` : '1px solid rgba(255,255,255,0.06)',
+        cursor: 'pointer', userSelect: 'none'
+      },
+      dotStyle: { width: 40, height: 40, borderRadius: 12, background: `rgba(${d.color},0.9)`, flexShrink: 0 },
+      select: () => this.selectSoundAndPlay(d.id)
+    }));
+
+    const timerPresets = this.timerPresetDefs.map((p) => ({
+      ...p,
+      style: {
+        padding: '11px 18px', borderRadius: 999,
+        font: "600 13px 'Manrope',sans-serif", cursor: 'pointer', userSelect: 'none',
+        whiteSpace: 'nowrap',
+        background: s.timerMinutes === p.minutes ? 'rgba(255,255,255,0.94)' : 'rgba(255,255,255,0.06)',
+        color: s.timerMinutes === p.minutes ? '#181622' : 'rgba(255,255,255,0.7)',
+        border: '1px solid rgba(255,255,255,0.1)'
+      },
+      select: () => this.setState({ timerMinutes: p.minutes })
+    }));
+
+    return {
+      isHome, isSounds, isTimer, isModeListen, isModePlay,
+      stageStyle,
+      deviceWidth,
+      deviceHeight,
+      appShellRef: this.appShellRef,
+      appShellStyle: {
+        position: 'relative', height: '100%', background: '#12111a', overflow: 'hidden',
+        fontFamily: "'Manrope',sans-serif"
+      },
+      contentScrollStyle,
+      homeStyle,
+      introBlockStyle,
+      titleTextStyle,
+      glowWrapStyle,
+      glowCanvasSize,
+      glowCanvasStyle,
+      statusBlockStyle,
+      modeSwitchStyle,
+      statusText,
+      segListenStyle, segPlayStyle,
+      setModeListen: this.setModeListen,
+      setModePlay: this.setModePlay,
+      sessionPanelStyle,
+      sessionHintText,
+      toggleSleepSession: this.toggleSleepSession,
+      sessionToggleLabel: s.sleepSessionActive ? '結束' : '開始',
+      sessionToggleStyle,
+      toggleDim: this.toggleDim,
+      dimStateLabel: s.screenDimmed ? '已變暗' : '正常',
+      dimButtonLabel: s.screenDimmed ? '恢復' : '變暗',
+      dimButtonStyle,
+      volumePercent,
+      changeVolume: this.changeVolume,
+      volumeSliderStyle,
+      screenDimmed: s.screenDimmed,
+      phoneImmersiveActive,
+      showTabBar: !phoneImmersiveActive,
+      immersiveStyle,
+      immersiveTopStyle,
+      immersiveModeLabel: isModePlay ? activeSoundDef.label : '聆聽房間',
+      immersiveGlowRef: this.immersiveGlowRef,
+      immersiveCanvasSize,
+      immersiveCanvasStyle,
+      immersiveStatusText: s.timerActive ? this.formatTime(s.timerRemaining) : '讓注意力漂開',
+      immersiveSubText: isModePlay ? `${activeSoundDef.label} 正在柔化房間的邊界` : '只看音量大小,不錄音、不上傳',
+      exitImmersive: this.exitImmersive,
+      immersiveExitStyle,
+      primaryBtnStyle,
+      primaryAction: this.primaryAction,
+      showPause: primaryActive,
+      showMic: !primaryActive && isModeListen,
+      showPlay: !primaryActive && isModePlay,
+      activeSoundLabel: activeSoundDef.label,
+      goSounds: this.goSounds,
+      soundLinkStyle,
+      timerActive: s.timerActive,
+      timerNotActive: !s.timerActive,
+      timerRemainingText: this.formatTime(s.timerRemaining),
+      timerPillStyle,
+      cancelTimer: this.cancelTimer,
+      soundsScreenStyle,
+      soundListStyle,
+      soundCatalog,
+      timerScreenStyle,
+      timerPresets,
+      selectedPresetLabel: selectedPreset.label,
+      startTimerHandler: this.startTimerHandler,
+      glowRef: this.glowRef,
+      goHome: this.goHome,
+      goSoundsTab: this.goSounds,
+      goTimerTab: this.goTimerTab,
+      tabBarStyle,
+      tabHomeColor: isHome ? '#ffb06a' : 'rgba(255,255,255,0.35)',
+      tabSoundsColor: isSounds ? '#ffb06a' : 'rgba(255,255,255,0.35)',
+      tabTimerColor: isTimer ? '#ffb06a' : 'rgba(255,255,255,0.35)'
+    };
+  }
+}
+
+</script>
+</body>
+</html>
